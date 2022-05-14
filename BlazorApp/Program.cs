@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using BlazorApp.Data;
+using BlazorBootstrap;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddSingleton<IChecking, SimpleChecking>();
 builder.Services.AddSingleton<CurrentUser>();
 builder.Services.AddSingleton<IFilePreparing, TextPreparing>();
 builder.Services.AddSingleton<ILCodePreparing>();
+builder.Services.AddBlazorBootstrap();
 
 var app = builder.Build();
 

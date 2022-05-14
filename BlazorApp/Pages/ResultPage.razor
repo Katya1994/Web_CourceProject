@@ -48,24 +48,31 @@
 
     private void WriteResultToFile(float textResult, float ilResult)
     {
-        var folderPath = Path.Combine(Environment.ContentRootPath, "results");
-        if(!Directory.Exists(folderPath))
-            Directory.CreateDirectory(folderPath);
-
-        string resultsPath = Path.Combine(folderPath, "results.txt");
-
-        if (!File.Exists(resultsPath))
+        try
         {
-            var resFile = File.Create(resultsPath);
-            resFile.Close();
-        }
+            var folderPath = Path.Combine(Environment.ContentRootPath, "results");
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
 
-        using (FileStream fstream = new FileStream(resultsPath, FileMode.Append))
-        {
-            using (StreamWriter writer = new StreamWriter(fstream, Encoding.Default))
+            string resultsPath = Path.Combine(folderPath, "results.txt");
+
+            if (!File.Exists(resultsPath))
             {
-                writer.WriteLine($"{_CurrentUser.UserName}:{textResult.ToString("0.00")}:{ilResult.ToString("0.00")}");
+                var resFile = File.Create(resultsPath);
+                resFile.Close();
             }
+
+            using (FileStream fstream = new FileStream(resultsPath, FileMode.Append))
+            {
+                using (StreamWriter writer = new StreamWriter(fstream, Encoding.Default))
+                {
+                    writer.WriteLine($"{_CurrentUser.UserName}:{textResult.ToString("0.00")}:{ilResult.ToString("0.00")}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.Print(ex.Message);
         }
     }
 }

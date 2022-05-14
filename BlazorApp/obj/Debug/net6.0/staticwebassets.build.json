@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "4LrBoztR5kgpyarcq8IExkg0wKqHxF/J317pvSmk3y4=",
+  "Hash": "mQXSAsgtgO4lk9Vt5JWIiYvd3+5/pdNAaU59mwN28Hs=",
   "Source": "BlazorApp",
   "BasePath": "_content/BlazorApp",
   "Mode": "Default",
@@ -16,6 +16,57 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "C:\\Users\\Kate\\.nuget\\packages\\blazor.bootstrap\\0.2.3\\staticwebassets\\blazor.bootstrap.css",
+      "SourceId": "Blazor.Bootstrap",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\Kate\\.nuget\\packages\\blazor.bootstrap\\0.2.3\\staticwebassets\\",
+      "BasePath": "_content/Blazor.Bootstrap",
+      "RelativePath": "blazor.bootstrap.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\Kate\\.nuget\\packages\\blazor.bootstrap\\0.2.3\\staticwebassets\\blazor.bootstrap.css"
+    },
+    {
+      "Identity": "C:\\Users\\Kate\\.nuget\\packages\\blazor.bootstrap\\0.2.3\\staticwebassets\\blazor.bootstrap.js",
+      "SourceId": "Blazor.Bootstrap",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\Kate\\.nuget\\packages\\blazor.bootstrap\\0.2.3\\staticwebassets\\",
+      "BasePath": "_content/Blazor.Bootstrap",
+      "RelativePath": "blazor.bootstrap.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\Kate\\.nuget\\packages\\blazor.bootstrap\\0.2.3\\staticwebassets\\blazor.bootstrap.js"
+    },
+    {
+      "Identity": "C:\\Users\\Kate\\.nuget\\packages\\blazor.bootstrap\\0.2.3\\staticwebassets\\icon\\128X128.png",
+      "SourceId": "Blazor.Bootstrap",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\Kate\\.nuget\\packages\\blazor.bootstrap\\0.2.3\\staticwebassets\\",
+      "BasePath": "_content/Blazor.Bootstrap",
+      "RelativePath": "icon/128X128.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\Kate\\.nuget\\packages\\blazor.bootstrap\\0.2.3\\staticwebassets\\icon\\128X128.png"
+    },
     {
       "Identity": "C:\\Users\\Kate\\RiderProjects\\WebCourceProject\\BlazorApp\\obj\\Debug\\net6.0\\scopedcss\\bundle\\BlazorApp.styles.css",
       "SourceId": "BlazorApp",
@@ -270,6 +321,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\Kate\\RiderProjects\\WebCourceProject\\BlazorApp\\wwwroot\\index.html",
+      "SourceId": "BlazorApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Kate\\RiderProjects\\WebCourceProject\\BlazorApp\\wwwroot\\",
+      "BasePath": "_content/BlazorApp",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
     }
   ]
 }
