@@ -27,3 +27,12 @@ C:\Users\Kate\RiderProjects\WebCourceProject\BlazorApp\obj\Debug\net6.0\BlazorAp
 C:\Users\Kate\RiderProjects\WebCourceProject\BlazorApp\obj\Debug\net6.0\ref\BlazorApp.dll
 C:\Users\Kate\RiderProjects\WebCourceProject\BlazorApp\bin\Debug\net6.0\ICSharpCode.SharpZipLib.dll
 C:\Users\Kate\RiderProjects\WebCourceProject\BlazorApp\obj\Debug\net6.0\BlazorApp.csproj.CopyComplete
+C:\Users\Kate\RiderProjects\WebCourceProject\BlazorApp\bin\Debug\net6.0\BlazorBootstrap.dll
+C:\Users\Kate\RiderProjects\WebCourceProject\BlazorApp\bin\Debug\net6.0\Microsoft.AspNetCore.Authorization.dll
+C:\Users\Kate\RiderProjects\WebCourceProject\BlazorApp\bin\Debug\net6.0\Microsoft.AspNetCore.Components.dll
+C:\Users\Kate\RiderProjects\WebCourceProject\BlazorApp\bin\Debug\net6.0\Microsoft.AspNetCore.Components.Forms.dll
+C:\Users\Kate\RiderProjects\WebCourceProject\BlazorApp\bin\Debug\net6.0\Microsoft.AspNetCore.Components.Web.dll
+C:\Users\Kate\RiderProjects\WebCourceProject\BlazorApp\bin\Debug\net6.0\Microsoft.AspNetCore.Metadata.dll
+C:\Users\Kate\RiderProjects\WebCourceProject\BlazorApp\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Kate\RiderProjects\WebCourceProject\BlazorApp\bin\Debug\net6.0\Microsoft.JSInterop.dll
+C:\Users\Kate\RiderProjects\WebCourceProject\BlazorApp\bin\Debug\net6.0\System.IO.Pipelines.dll
