@@ -64,7 +64,7 @@
         {
             using (StreamWriter writer = new StreamWriter(fstream, Encoding.Default))
             {
-                writer.WriteLine($"{_CurrentUser.UserName}:{textResult}:{ilResult}");
+                writer.WriteLine($"{_CurrentUser.UserName}:{textResult.ToString("0.00")}:{ilResult.ToString("0.00")}");
             }
         }
     }
