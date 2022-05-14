@@ -2,5 +2,5 @@
 
 public interface IChecking
 {
-    public double CalculateUniquenessPercent(string currentUser, Dictionary<string, List<string>> dictionary);
+    public double CalculatePlagPercent(string currentUser, Dictionary<string, List<string>> dictionary);
 }
