@@ -24,6 +24,8 @@ public class ILCodePreparing : TextPreparing
             ProcessStartInfo startInfo = new ProcessStartInfo(_pathToBuild);
             startInfo.Arguments = $"\"{SlnPath}\" /t:Rebuild /p:Configuration=Debug /p:TargetFrameworkVersion=v4.7.2";
             startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = true;
+            
             process = Process.Start(startInfo);
             process.WaitForExit();
             return true;
@@ -45,8 +47,8 @@ public class ILCodePreparing : TextPreparing
 
             var slndir = new FileInfo(SlnPath).Directory;
             var list = slndir.GetDirectories();
-            
-            foreach (var dir in new FileInfo(SlnPath).Directory.GetDirectories())
+
+            foreach (var dir in slndir.GetDirectories())
             {
                 if(dir.Name == ".vs")
                     continue;
@@ -54,12 +56,19 @@ public class ILCodePreparing : TextPreparing
                 projects.Add(file);
             }
             
-            ProcessStartInfo startInfo = new ProcessStartInfo(_pathToIldasm);
-            startInfo.Arguments = $"\"{projects[0]}\" /\"output:{SavePath}\\file_{key}.il\"";
-            startInfo.UseShellExecute = false;
+            foreach (var project in projects)
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo(_pathToIldasm);
+                startInfo.Arguments = $"\"{project}\" /\"output:{SavePath}\\file_{key}_{projects.IndexOf(project)}.il\"";
+                //не получается сделать, чтобы окно ildasm.exe не появлялось
+                startInfo.UseShellExecute = false;
+                startInfo.UserName = null;
+                startInfo.CreateNoWindow = true;
 
-            process = Process.Start(startInfo);
-            process.WaitForExit();
+                process = Process.Start(startInfo);
+                process.WaitForExit();
+            }
+
             return true;
         }
         catch (Exception ex)
