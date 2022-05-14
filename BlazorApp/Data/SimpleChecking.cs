@@ -1,51 +1,35 @@
-﻿namespace BlazorApp.Data;
+﻿using System.Diagnostics;
+
+namespace BlazorApp.Data;
 
 public class SimpleChecking: IChecking
 {
     public Dictionary<string, List<string>> CheckingDictionary { get; private set; } = new Dictionary<string, List<string>>();
 
-    public double CalculateUniquenessPercent(string currentUser, Dictionary<string, List<string>> dictionary)
+    public double CalculatePlagPercent(string currentUser, Dictionary<string, List<string>> dictionary)
     {
-        CheckingDictionary = dictionary;
-        
-        // return LineAnalyze(dictionary[currentUser], 
-        //     dictionary.Where(i => i.Key != currentUser).Select(k => k.Value).ToList());
-        
-        return LevenshteinAnalyze(dictionary[currentUser], 
-            dictionary.Where(i => i.Key != currentUser).Select(k => k.Value).ToList());
-    }
-    
-    public List<string> CleanText(string[] lines)
-    {
-        List<string> list = new List<string>();
-
-        foreach (string line in lines)
+        try
         {
-            if (!string.IsNullOrWhiteSpace(line))
-            {
-                foreach (var ch in line)
-                {
-                    if (char.IsLetterOrDigit(ch))
-                    {
-                        list.Add(line.Trim().ToLower());
-                        break;
-                    }
-                }
-            }
+            CheckingDictionary = dictionary;
+
+            // return LineAnalyze(dictionary[currentUser], 
+            //     dictionary.Where(i => i.Key != currentUser).Select(k => k.Value).ToList());
+
+            return LevenshteinAnalyze(dictionary[currentUser],
+                dictionary.Where(i => i.Key != currentUser).Select(k => k.Value).ToList());
         }
-        return list;
+        catch (Exception ex)
+        {
+            Debug.Print(ex.Message);
+            return Double.MinValue;
+        }
     }
-    
+
     public double LineAnalyze(List<string> myList, List<List<string>> checkList)
     {
         double result = 0;
 
         var commonList = GetUnionList(checkList);
-
-        // foreach (var list in checkList)
-        // {
-        //     commonList = commonList.Union(list).ToList();
-        // }
 
         for(int i = 0; i < commonList.Count; i++)
         {
@@ -59,21 +43,6 @@ public class SimpleChecking: IChecking
             }
         }
 
-        /*foreach(var list in checkLIst)
-        {
-            for(int i = 0; i < list.Count; i++)
-            {
-                for(int j = 0; j < myList.Count; j++)
-                {
-                    if (myList[j] == list[i])
-                    {
-                        result++;
-                        break;
-                    }                            
-                }
-            }
-        }*/
-
         return result/myList.Count * 100;
     }
 
@@ -82,19 +51,7 @@ public class SimpleChecking: IChecking
         double result = 0;
         
         var commonList = GetUnionList(checkList);
-        /*for(int i = 0; i < commonList.Count; i++)
-        {
-            for(int j = 0; j < myList.Count; j++)
-            {
-                var res = ComputeLevenshteinSimilarity(myList[j], commonList[i]);
-                if (res >= 0.4)
-                {
-                    result++;
-                    break;
-                }
-            }
-        }*/
-        
+
         for(int i = 0; i < myList.Count; i++)
         {
             for(int j = 0; j < commonList.Count; j++)

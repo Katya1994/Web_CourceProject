@@ -7,28 +7,32 @@
 @using System.Text
 @using ICSharpCode.SharpZipLib.Core
 @using ICSharpCode.SharpZipLib.Zip
-@
+@using System.ComponentModel.DataAnnotations
+@using System.Diagnostics
+@using Microsoft.Extensions.FileProviders
+
 
 <h3>Results:</h3>
 @if (_CurrentUser.UserName != null)
 {
     <label>Result for @_CurrentUser.UserName:</label>
-    <label>your result of plagiary = @result %</label>
+    <label>your result of plagiary = @textCheckResult %</label>
 }
 
 @code {
     Dictionary<string, List<string>> _dictionary = new Dictionary<string, List<string>>();
-    double result = 0;
+    double textCheckResult = 0;
     
     protected override void OnInitialized()
     {
         if(_CurrentUser.UserName is null)
             return;
         
+        ExtractAll();
         FillCheckingDictionary();
         
-        result = _Checking.CalculateUniquenessPercent(_CurrentUser.UserName, _dictionary);
-        WriteResultToFile(result);
+        textCheckResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _dictionary);
+        WriteResultToFile(textCheckResult);
     }
 
     private void WriteResultToFile(double result)
@@ -51,14 +55,39 @@
         }
     }
     
+    private List<FileInfo> GetRecursFiles(DirectoryInfo rootDir)
+    {
+        List<FileInfo> fileList = new List<FileInfo>();
+        try
+        {
+            var dirs = rootDir.GetDirectories();
+            foreach (var dir in dirs)
+            {
+                fileList.AddRange(GetRecursFiles(dir));
+            }
+            var files = rootDir.GetFiles();
+            foreach (var file in files)
+            {
+                if(file.Extension == ".cache" || file.Extension == ".config")
+                    continue;
+                
+                fileList.Add(file);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.Print(ex.Message);
+        }
+        return fileList;
+    }
+    
     public List<string> GetCleanText(DirectoryInfo dir)
     {
         List<string> list = new List<string>();
 
-        var fileList = dir.GetFiles();
-        var dirList = dir.GetDirectories();
+        List<FileInfo> fileList = GetRecursFiles(dir);
 
-        foreach (var file in dir.GetFiles())
+        foreach (var file in fileList)
         {
             foreach (string line in File.ReadAllLines(file.FullName))
             {
@@ -80,7 +109,7 @@
     }
 
     //для текстовых файлов
-    /*public void FillCheckingDictionary()
+    public void FillCheckingDictionary()
     {
         DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(Environment.ContentRootPath, "uploads"));
         var dirs = directoryInfo.GetDirectories();
@@ -89,28 +118,33 @@
             var textList = GetCleanText(dir);
             _dictionary.Add(dir.Name, textList);
         }
-    }*/
+    }
 
     //для проектов в архиве
-    public void FillCheckingDictionary()
+    public void ExtractAll()
     {
-        DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(Environment.ContentRootPath, "uploads"));
-        var dirs = directoryInfo.GetDirectories();
-        
-        foreach (var dir in dirs)
+        try
         {
-            //extract zip
-            var tempList = dir.GetFiles();
-            foreach (var file in tempList)
+            DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(Environment.ContentRootPath, "uploads"));
+            var dirs = directoryInfo.GetDirectories();
+
+            foreach (var dir in dirs)
             {
-                if (file.Extension == ".zip")
+                //extract zip
+                var tempList = dir.GetFiles();
+                foreach (var file in tempList)
                 {
-                    ExtractZipContent(file.FullName, null, $"{file.DirectoryName}");
-                    file.Delete();
+                    if (file.Extension == ".zip")
+                    {
+                        ExtractZipContent(file.FullName, null, $"{file.DirectoryName}");
+                        file.Delete();
+                    }
                 }
             }
-            
-            //build
+        }
+        catch (Exception ex)
+        {
+            Debug.Print(ex.Message);
         }
     }
     
