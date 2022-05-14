@@ -2,5 +2,5 @@
 
 public interface IChecking
 {
-    public double CalculatePlagPercent(string currentUser, Dictionary<string, List<string>> dictionary);
+    public float CalculatePlagPercent(string currentUser, Dictionary<string, List<string>> dictionary);
 }

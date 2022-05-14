@@ -17,7 +17,7 @@ public class TextPreparing: IFilePreparing
             var files = rootDir.GetFiles();
             foreach (var file in files)
             {
-                if(file.Extension == ".cache" || file.Extension == ".config")
+                if(file.Extension == ".cache" || file.Extension == ".config" || file.Extension == ".res" || file.Extension == ".exe" || file.Extension == ".pdb")
                     continue;
                 
                 fileList.Add(file);
@@ -58,7 +58,7 @@ public class TextPreparing: IFilePreparing
     }
 
     //для текстовых файлов
-    public Dictionary<string, List<string>> FillCheckingDictionary(string path)
+    public virtual Dictionary<string, List<string>> FillCheckingDictionary(string path)
     {
         Dictionary<string, List<string>> _dictionary = new Dictionary<string, List<string>>();
         

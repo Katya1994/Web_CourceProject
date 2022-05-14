@@ -6,7 +6,7 @@ public class SimpleChecking: IChecking
 {
     public Dictionary<string, List<string>> CheckingDictionary { get; private set; } = new Dictionary<string, List<string>>();
 
-    public double CalculatePlagPercent(string currentUser, Dictionary<string, List<string>> dictionary)
+    public float CalculatePlagPercent(string currentUser, Dictionary<string, List<string>> dictionary)
     {
         try
         {
@@ -21,13 +21,13 @@ public class SimpleChecking: IChecking
         catch (Exception ex)
         {
             Debug.Print(ex.Message);
-            return Double.MinValue;
+            return float.MinValue;
         }
     }
 
-    public double LineAnalyze(List<string> myList, List<List<string>> checkList)
+    public float LineAnalyze(List<string> myList, List<List<string>> checkList)
     {
-        double result = 0;
+        float result = 0;
 
         var commonList = GetUnionList(checkList);
 
@@ -46,9 +46,9 @@ public class SimpleChecking: IChecking
         return result/myList.Count * 100;
     }
 
-    public double LevenshteinAnalyze(List<string> myList, List<List<string>> checkList)
+    public float LevenshteinAnalyze(List<string> myList, List<List<string>> checkList)
     {
-        double result = 0;
+        float result = 0;
         
         var commonList = GetUnionList(checkList);
 
@@ -57,7 +57,7 @@ public class SimpleChecking: IChecking
             for(int j = 0; j < commonList.Count; j++)
             {
                 var res = ComputeLevenshteinSimilarity(myList[i], commonList[j]);
-                if (res >= 0.4)
+                if (res >= 0.97)
                 {
                     result++;
                     break;
@@ -80,11 +80,11 @@ public class SimpleChecking: IChecking
         return commonList;
     }
     
-    private double ComputeLevenshteinSimilarity(string source, string target)
+    private float ComputeLevenshteinSimilarity(string source, string target)
     {
-        if ((source == null) || (target == null)) return 0.0;
-        if ((source.Length == 0) || (target.Length == 0)) return 0.0;
-        if (source == target) return 1.0;
+        if ((source == null) || (target == null)) return 0.0f;
+        if ((source.Length == 0) || (target.Length == 0)) return 0.0f;
+        if (source == target) return 1.0f;
 
         int sourceWordCount = source.Length;
         int targetWordCount = target.Length;
@@ -114,6 +114,6 @@ public class SimpleChecking: IChecking
             }
         }
         
-        return (1.0 - ((double)distance[sourceWordCount, targetWordCount] / (double)Math.Max(source.Length, target.Length)));
+        return (float)(1.0 - ((float)distance[sourceWordCount, targetWordCount] / (float)Math.Max(source.Length, target.Length)));
     }
 }

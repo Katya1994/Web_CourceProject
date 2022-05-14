@@ -2,6 +2,7 @@
 @inject CurrentUser _CurrentUser;
 @inject IChecking _Checking;
 @inject IFilePreparing _TextPreparing;
+@inject ILCodePreparing _IlCodePreparing;
 
 @page "/ResultPage"
 @using BlazorApp.Data
@@ -12,12 +13,15 @@
 @if (_CurrentUser.UserName != null)
 {
     <label>Result for @_CurrentUser.UserName:</label>
-    <label>your result of plagiary = @textCheckResult %</label>
+    <label>text result of plagiary = @textCheckResult.ToString("0.00") %</label>
+    <label>il code = @ilCheckResult.ToString("0.00") %</label>
 }
 
 @code {
-    Dictionary<string, List<string>> _dictionary;
+    Dictionary<string, List<string>> _textDictionary;
+    Dictionary<string, List<string>> _ilCodeDictionary;
     double textCheckResult = 0;
+    double ilCheckResult = 0;
 
     protected override void OnInitialized()
     {
@@ -25,12 +29,20 @@
             return;
         
         string path = Path.Combine(Environment.ContentRootPath, "uploads");
+        string saveIlPath = Path.Combine(Environment.ContentRootPath, "il");
+        
+        if(!Directory.Exists(saveIlPath))
+            Directory.CreateDirectory(saveIlPath);
+        
         _TextPreparing = new TextPreparing();
+        _IlCodePreparing = new ILCodePreparing();
 
         Extracting.ExtractAll(path);
-        _dictionary = _TextPreparing.FillCheckingDictionary(path);
+        _textDictionary = _TextPreparing.FillCheckingDictionary(path);
+        _ilCodeDictionary = _IlCodePreparing.FillCheckingDictionary(path, saveIlPath);
         
-        textCheckResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _dictionary);
+        textCheckResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _textDictionary);
+        ilCheckResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _ilCodeDictionary);
         WriteResultToFile(textCheckResult);
     }
 
@@ -38,12 +50,15 @@
     {
         var folderPath = Path.Combine(Environment.ContentRootPath, "results");
         if(!Directory.Exists(folderPath))
-            System.IO.Directory.CreateDirectory(folderPath);
+            Directory.CreateDirectory(folderPath);
 
         string resultsPath = Path.Combine(folderPath, "results.txt");
 
         if (!File.Exists(resultsPath))
-            File.Create(resultsPath);
+        {
+            var resFile = File.Create(resultsPath);
+            resFile.Close();
+        }
 
         using (FileStream fstream = new FileStream(resultsPath, FileMode.Append))
         {

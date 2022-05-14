@@ -11,6 +11,7 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSingleton<IChecking, SimpleChecking>();
 builder.Services.AddSingleton<CurrentUser>();
 builder.Services.AddSingleton<IFilePreparing, TextPreparing>();
+builder.Services.AddSingleton<ILCodePreparing>();
 
 var app = builder.Build();
 
