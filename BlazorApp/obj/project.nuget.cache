@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "XymzqbJ7mNgvsUm8PvjVB9GIvEYhNw0Rg2pxpE7mKE73dq/lbm3lIDynC4oY6f5gzHDLpIjdU1IFi67zmft7cQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Kate\\RiderProjects\\WebCourceProject\\BlazorApp\\BlazorApp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Kate\\.nuget\\packages\\sharpziplib\\1.3.3\\sharpziplib.1.3.3.nupkg.sha512"
+  ],
+  "logs": []
+}

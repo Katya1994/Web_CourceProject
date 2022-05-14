@@ -1,0 +1,62 @@
+﻿@page "/AdminPage"
+@using BlazorApp.Data
+<h3>Enter admin data:</h3>
+
+@inject IWebHostEnvironment Environment;
+
+<p>
+    <label>
+        Enter admin name:
+        <input type="text" @bind="adminName" />
+    </label>
+</p>
+<p>
+    <label>
+        Enter admin password:
+        <input type="password" @bind="adminPassword" />
+    </label>
+</p>
+
+<button @onclick="f => ShowAllResults(adminName, adminPassword)">Submit</button>
+
+@if (studentResults.Count > 0)
+{
+    foreach (var item in studentResults)
+    {
+        <p>@item.Key: @item.Value</p>
+    }
+}
+
+@code {
+    string adminName;
+    string adminPassword;
+
+    double[] results;
+    Dictionary<string, string> studentResults = new Dictionary<string, string>();
+
+    protected override void OnInitialized()
+    {
+    }
+    
+    
+    //admin; password = 123;
+    
+    private void ShowAllResults(string name, string password)
+    {
+        if (name == "admin" && password == "123")
+        {
+            string path = Path.Combine(Environment.ContentRootPath, "results", "results.txt");
+            
+            if (File.Exists(path))
+            {
+                List<string> list = File.ReadLines(path).ToList();
+            
+                foreach (var line in File.ReadLines(path).ToList())
+                {
+                    var temp = line.Split(":");
+                    studentResults.Add(temp[0], temp[1]);
+                }
+            }
+        }
+    }
+}
