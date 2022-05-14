@@ -20,8 +20,8 @@
 @code {
     Dictionary<string, List<string>> _textDictionary;
     Dictionary<string, List<string>> _ilCodeDictionary;
-    double textCheckResult = 0;
-    double ilCheckResult = 0;
+    float textCheckResult = 0;
+    float ilCheckResult = 0;
 
     protected override void OnInitialized()
     {
@@ -43,10 +43,10 @@
         
         textCheckResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _textDictionary);
         ilCheckResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _ilCodeDictionary);
-        WriteResultToFile(textCheckResult);
+        WriteResultToFile(textCheckResult, ilCheckResult);
     }
 
-    private void WriteResultToFile(double result)
+    private void WriteResultToFile(float textResult, float ilResult)
     {
         var folderPath = Path.Combine(Environment.ContentRootPath, "results");
         if(!Directory.Exists(folderPath))
@@ -64,7 +64,7 @@
         {
             using (StreamWriter writer = new StreamWriter(fstream, Encoding.Default))
             {
-                writer.WriteLine($"{_CurrentUser.UserName}:{result}");
+                writer.WriteLine($"{_CurrentUser.UserName}:{textResult}:{ilResult}");
             }
         }
     }
