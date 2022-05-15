@@ -10,6 +10,7 @@
 @using System.Diagnostics
 
 <h3>Results:</h3>
+<Button Color="ButtonColor.Primary" @onclick="f => Calculate()">Calculate</Button>
 @if (_CurrentUser.UserName != null)
 {
     <label>Result for @_CurrentUser.UserName:</label>
@@ -20,37 +21,36 @@
 @code {
     Dictionary<string, List<string>> _textDictionary;
     Dictionary<string, List<string>> _ilCodeDictionary;
-    float textCheckResult = 0;
-    float ilCheckResult = 0;
 
+    string path;
+    string saveIlPath;
+    
     protected override void OnInitialized()
     {
         if(_CurrentUser.UserName is null)
             return;
         
-        string path = Path.Combine(Environment.ContentRootPath, "uploads");
-        string saveIlPath = Path.Combine(Environment.ContentRootPath, "il");
+        path = Path.Combine(Environment.ContentRootPath, "uploads");
+        saveIlPath = Path.Combine(Environment.ContentRootPath, "il");
         
         if(!Directory.Exists(saveIlPath))
             Directory.CreateDirectory(saveIlPath);
+    }
 
-        //результаты
-        if (_CurrentUser.TextResult is null)
-        {
-            _TextPreparing = new TextPreparing();
-            _IlCodePreparing = new ILCodePreparing();
+    private void Calculate()
+    {
+        _TextPreparing = new TextPreparing();
+        _IlCodePreparing = new ILCodePreparing();
 
-            Extracting.ExtractAll(path);
-            _textDictionary = _TextPreparing.FillCheckingDictionary(path);
-            _ilCodeDictionary = _IlCodePreparing.FillCheckingDictionary(path, saveIlPath);
-            _CurrentUser.TextResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _textDictionary).ToString("0.00");
-        }
-        if(_CurrentUser.ILResult is null) 
-            _CurrentUser.ILResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _ilCodeDictionary).ToString("0.00");
+        Extracting.ExtractAll(path);
+        _textDictionary = _TextPreparing.FillCheckingDictionary(path);
+        _ilCodeDictionary = _IlCodePreparing.FillCheckingDictionary(path, saveIlPath);
+        _CurrentUser.TextResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _textDictionary).ToString("0.00");
+        _CurrentUser.ILResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _ilCodeDictionary).ToString("0.00");
 
         WriteResultToFile(_CurrentUser.ILResult, _CurrentUser.TextResult);
     }
-
+    
     private void WriteResultToFile(string textResult, string ilResult)
     {
         try
