@@ -9,59 +9,47 @@
 
 @inject CurrentUser _CurrentUser;
 
-@*<InputFile OnChange="@LoadFiles" multiple />*@
+<div class="container">
+    <div class="bs-callout bs-callout-info">
+        <h1>Upload Files</h1>
+        <p>Upload up to <code>@maxAllowedFiles</code> of up to <code>@maxFileSize</code> bytes</p>
+        <p>You must enter your name</p>
+        <p>Allowed <code>.zip</code> format of your project</p>
+    </div>
+    <div>
+        <input type="text" class="form-control" placeholder="Student name" @bind="studentName"/>
+    </div>
+    <div>
+        <div class="alert-info" style="margin-top: 20px">
+            <InputFile OnChange="@LoadFiles" multiple/> 
+        </div>
+    </div>
+    <div class="alert-info" style="margin-top: 10px">
+       @if (isLoading)
+           {
+               <p>Uploading...</p>
+           }
+           else
+           {
+               <ul>
+                   @foreach (var file in loadedFiles)
+                   {
+                       <li>
+                           <ul>
+                               <li>Name: @file.Name</li>
+                               <li>Last modified: @file.LastModified.ToString()</li>
+                               <li>Size (bytes): @file.Size</li>
+                               <li>Content type: @file.ContentType</li>
+                           </ul>
+                       </li>
+                   }
+               </ul>
+           } 
+    </div>
+</div>
 
-<h3>Upload Files</h3>
 
-<p>
-    <label>
-        Enter your name:
-        <input type="text" @bind="studentName" />
-    </label>
-</p>
 
-@*<p>
-    <label>
-        Max file size: @maxFileSize
-    </label>
-</p>*@
-
-@*
-<p>
-    <label>
-        Max allowed files:
-        <input type="number" @bind="maxAllowedFiles" />
-    </label>
-</p>
-*@
-
-<p>
-    <Label>
-        Upload up to @maxAllowedFiles of up to @maxFileSize bytes:
-        <InputFile OnChange="@LoadFiles" multiple />
-    </Label>
-</p>
-
-@if (isLoading)
-{
-    <p>Uploading...</p>
-}
-else
-{
-    <ul>
-        @foreach (var file in loadedFiles)
-        {
-            <li>
-                <ul>
-                    <li>Name: @file.Name</li>
-                    <li>Last modified: @file.LastModified.ToString()</li>
-                    <li>Size (bytes): @file.Size</li>
-                    <li>Content type: @file.ContentType</li>
-                </ul>
-            </li>
-        }
-    </ul>
-}
 
 @code {
     private List<IBrowserFile> loadedFiles = new();

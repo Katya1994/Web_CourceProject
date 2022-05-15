@@ -13,8 +13,8 @@
 @if (_CurrentUser.UserName != null)
 {
     <label>Result for @_CurrentUser.UserName:</label>
-    <label>text result of plagiary = @textCheckResult.ToString("0.00") %</label>
-    <label>il code = @ilCheckResult.ToString("0.00") %</label>
+    <label>text result of plagiary = @_CurrentUser.TextResult %</label>
+    <label>il code = @_CurrentUser.ILResult %</label>
 }
 
 @code {
@@ -33,20 +33,25 @@
         
         if(!Directory.Exists(saveIlPath))
             Directory.CreateDirectory(saveIlPath);
-        
-        _TextPreparing = new TextPreparing();
-        _IlCodePreparing = new ILCodePreparing();
 
-        Extracting.ExtractAll(path);
-        _textDictionary = _TextPreparing.FillCheckingDictionary(path);
-        _ilCodeDictionary = _IlCodePreparing.FillCheckingDictionary(path, saveIlPath);
-        
-        textCheckResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _textDictionary);
-        ilCheckResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _ilCodeDictionary);
-        WriteResultToFile(textCheckResult, ilCheckResult);
+        //результаты
+        if (_CurrentUser.TextResult is null)
+        {
+            _TextPreparing = new TextPreparing();
+            _IlCodePreparing = new ILCodePreparing();
+
+            Extracting.ExtractAll(path);
+            _textDictionary = _TextPreparing.FillCheckingDictionary(path);
+            _ilCodeDictionary = _IlCodePreparing.FillCheckingDictionary(path, saveIlPath);
+            _CurrentUser.TextResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _textDictionary).ToString("0.00");
+        }
+        if(_CurrentUser.ILResult is null) 
+            _CurrentUser.ILResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _ilCodeDictionary).ToString("0.00");
+
+        WriteResultToFile(_CurrentUser.ILResult, _CurrentUser.TextResult);
     }
 
-    private void WriteResultToFile(float textResult, float ilResult)
+    private void WriteResultToFile(string textResult, string ilResult)
     {
         try
         {
@@ -66,7 +71,7 @@
             {
                 using (StreamWriter writer = new StreamWriter(fstream, Encoding.Default))
                 {
-                    writer.WriteLine($"{_CurrentUser.UserName}:{textResult.ToString("0.00")}:{ilResult.ToString("0.00")}");
+                    writer.WriteLine($"{_CurrentUser.UserName}:{textResult}:{ilResult}");
                 }
             }
         }

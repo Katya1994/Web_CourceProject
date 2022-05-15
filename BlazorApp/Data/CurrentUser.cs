@@ -4,11 +4,7 @@ public class CurrentUser
 {
     public string UserName { get; set; }
 
-    //public string GetUserName => userName;
-    //public string SetUserName(string name) => userName = name;
-
-    // public CurrentUser(string userName)
-    // {
-    //     UserName = userName;
-    // }
+    public string TextResult { get; set; }
+    
+    public string ILResult { get; set; }
 }
