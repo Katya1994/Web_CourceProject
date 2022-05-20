@@ -1,49 +1,72 @@
 ﻿@page "/AdminPage"
 @using BlazorApp.Data
-<h3>Enter admin data:</h3>
 
 @inject IWebHostEnvironment Environment;
 
-<p>
-    <label>
-        Enter admin name:
-        <input type="text" @bind="adminName" />
-    </label>
-</p>
-<p>
-    <label>
-        Enter admin password:
-        <input type="password" @bind="adminPassword" />
-    </label>
-</p>
-
-<Button Color="ButtonColor.Primary" @onclick="f => ShowAllResults(adminName, adminPassword)">Submit</Button>
-
-@if (studentResults.Count > 0)
-{
-    foreach (var item in studentResults)
+<div class="container">
+    <div class="bs-callout bs-callout-info">
+        <h1>Admin page</h1>
+        <p>Enter login and password of admin to show all results</p>
+    </div>
+    <div>
+        <input type="text" class="form-control" placeholder="Login" @bind="adminName"/>
+    </div>
+    <div style="margin-top: 20px">
+        <input type="password" class="form-control" placeholder="Password" @bind="adminPassword"/>
+    </div>
+    <div style="margin-top: 20px">
+        <Button Color="ButtonColor.Primary" @onclick="f => ShowAllResults(adminName, adminPassword)">Submit</Button> 
+    </div>
+    @if (studentResults.Count > 0)
     {
-        <p>@item.Key: @item.Value</p>
+        <div style="margin-top: 20px; height: 500px; overflow: auto;">
+        <table class="table table-dark table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Student</th>
+                <th scope="col">Pre-check result</th>
+                <th scope="col">Il-code check result</th>
+            </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in studentResults)
+                {
+                    index++;
+                    <tr>
+                        <th scope="row">@index</th>
+                        <td>@item.Key</td>
+                        <td>@item.Value[0]</td>
+                        <td>@item.Value[1]</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        </div>
     }
-}
+</div>
+
+
 
 @code {
     string adminName;
     string adminPassword;
 
-    double[] results;
-    Dictionary<string, string> studentResults = new Dictionary<string, string>();
+    string[] adminData = new string[] { "admin", "123" };
 
+    double[] results;
+    Dictionary<string, string[]> studentResults = new Dictionary<string, string[]>();
+
+    int index = 0;
+    
     protected override void OnInitialized()
     {
     }
     
     
-    //admin; password = 123;
-    
     private void ShowAllResults(string name, string password)
     {
-        if (name == "admin" && password == "123")
+        if (name == adminData[0] && password == adminData[1])
         {
             string path = Path.Combine(Environment.ContentRootPath, "results", "results.txt");
             
@@ -54,7 +77,7 @@
                 foreach (var line in File.ReadLines(path).ToList())
                 {
                     var temp = line.Split(":");
-                    studentResults.Add(temp[0], temp[1]);
+                    studentResults.Add(temp[0], new string[]{temp[1], temp[2]});
                 }
             }
         }
