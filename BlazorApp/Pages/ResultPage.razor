@@ -9,24 +9,65 @@
 @using System.Text
 @using System.Diagnostics
 
-<h3>Results:</h3>
-<Button Color="ButtonColor.Primary" @onclick="f => Calculate()">Calculate</Button>
-@if (_CurrentUser.UserName != null)
-{
-    <label>Result for @_CurrentUser.UserName:</label>
-    <label>text result of plagiary = @_CurrentUser.TextResult %</label>
-    <label>il code = @_CurrentUser.ILResult %</label>
-}
+<div class="container">
+    <div class="bs-callout bs-callout-info">
+        <h1>Results</h1>
+    </div>
+    <div>
+        <Button Color="ButtonColor.Primary" @onclick="f => Calculate()">Calculate plagiary percent</Button>
+    </div>
+    <div class="alert-info" style="margin-top: 20px;"> 
+        @if (isCalculated)
+        {
+            <div style="margin-left: 20px;">Result for @_CurrentUser.UserName:</div>
+            <div style="margin-left: 20px;">text result of plagiary = @_CurrentUser.TextResult %</div>
+            <div style="margin-left: 20px;">il code = @_CurrentUser.ILResult %</div>
+        }
+    </div>
+    <div>
+        <Preload Color="SpinnerColor.Primary"></Preload>
+    </div>
+</div>
+
+
 
 @code {
     Dictionary<string, List<string>> _textDictionary;
     Dictionary<string, List<string>> _ilCodeDictionary;
-
+    
     string path;
     string saveIlPath;
+
+    bool isCalculated = false;
+    
+    [Inject] protected PreloadService PageLoadingService { get; set; }
+    
+    private async Task LoadSpinnerAsync()
+    {
+        try
+        {
+            PageLoadingService.Show();
+            await Task.Delay(5000);
+        }
+        catch(Exception ex)
+        {
+            Debug.Print(ex.Message);
+        }
+        finally
+        {
+           //PageLoadingService.Hide();
+        }
+    }
+    
+    private async Task OnSpinnerChangedAsync(ChangeEventArgs args)
+    {
+        await LoadSpinnerAsync();
+    }
     
     protected override void OnInitialized()
     {
+        isCalculated = false;
+        
         if(_CurrentUser.UserName is null)
             return;
         
@@ -37,18 +78,32 @@
             Directory.CreateDirectory(saveIlPath);
     }
 
-    private void Calculate()
+    private async void Calculate()
     {
-        _TextPreparing = new TextPreparing();
-        _IlCodePreparing = new ILCodePreparing();
+        await OnSpinnerChangedAsync(new ChangeEventArgs());
+        try
+        {
+            _TextPreparing = new TextPreparing();
+            _IlCodePreparing = new ILCodePreparing();
 
-        Extracting.ExtractAll(path);
-        _textDictionary = _TextPreparing.FillCheckingDictionary(path);
-        _ilCodeDictionary = _IlCodePreparing.FillCheckingDictionary(path, saveIlPath);
-        _CurrentUser.TextResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _textDictionary).ToString("0.00");
-        _CurrentUser.ILResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _ilCodeDictionary).ToString("0.00");
+            Extracting.ExtractAll(path);
+            _textDictionary = _TextPreparing.FillCheckingDictionary(path);
+            _ilCodeDictionary = _IlCodePreparing.FillCheckingDictionary(path, saveIlPath);
+            _CurrentUser.TextResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _textDictionary).ToString("0.00");
+            _CurrentUser.ILResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _ilCodeDictionary).ToString("0.00");
 
-        WriteResultToFile(_CurrentUser.ILResult, _CurrentUser.TextResult);
+            WriteResultToFile(_CurrentUser.ILResult, _CurrentUser.TextResult);
+        }
+        catch (Exception ex)
+        {
+            Debug.Print(ex.Message);
+        }
+        finally
+        {
+            PageLoadingService.Hide();
+            isCalculated = true;
+            StateHasChanged();
+        }
     }
     
     private void WriteResultToFile(string textResult, string ilResult)
