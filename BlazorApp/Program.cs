@@ -12,7 +12,8 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSingleton<IChecking, SimpleChecking>();
 builder.Services.AddSingleton<CurrentUser>();
 builder.Services.AddSingleton<IFilePreparing, TextPreparing>();
-builder.Services.AddSingleton<ILCodePreparing>();
+builder.Services.AddSingleton<ByteCodePreparing>();
+builder.Services.AddSingleton<IChecking, ByteCodeChecking>();
 builder.Services.AddBlazorBootstrap();
 
 var app = builder.Build();

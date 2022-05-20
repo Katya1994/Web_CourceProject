@@ -4,16 +4,16 @@ namespace BlazorApp.Data;
 
 public class SimpleChecking: IChecking
 {
+    private CheckHelper helper;
     public Dictionary<string, List<string>> CheckingDictionary { get; private set; } = new Dictionary<string, List<string>>();
 
     public float CalculatePlagPercent(string currentUser, Dictionary<string, List<string>> dictionary)
     {
         try
         {
+            helper = new CheckHelper();
+            
             CheckingDictionary = dictionary;
-
-            // return LineAnalyze(dictionary[currentUser], 
-            //     dictionary.Where(i => i.Key != currentUser).Select(k => k.Value).ToList());
 
             return LevenshteinAnalyze(dictionary[currentUser],
                 dictionary.Where(i => i.Key != currentUser).Select(k => k.Value).ToList());
@@ -29,7 +29,7 @@ public class SimpleChecking: IChecking
     {
         float result = 0;
 
-        var commonList = GetUnionList(checkList);
+        var commonList = helper.GetUnionList(checkList);
 
         for(int i = 0; i < commonList.Count; i++)
         {
@@ -50,14 +50,14 @@ public class SimpleChecking: IChecking
     {
         float result = 0;
         
-        var commonList = GetUnionList(checkList);
+        var commonList = helper.GetUnionList(checkList);
 
         for(int i = 0; i < myList.Count; i++)
         {
             for(int j = 0; j < commonList.Count; j++)
             {
-                var res = ComputeLevenshteinSimilarity(myList[i], commonList[j]);
-                if (res >= 0.97)
+                var res = helper.ComputeLevenshteinSimilarity(myList[i], commonList[j]);
+                if (res >= 0.7)
                 {
                     result++;
                     break;
@@ -68,52 +68,5 @@ public class SimpleChecking: IChecking
         return result/myList.Count * 100;
     }
     
-    private List<string> GetUnionList(List<List<string>> checkList)
-    {
-        var commonList = new List<string>();
-
-        foreach (var list in checkList)
-        {
-            commonList = commonList.Union(list).ToList();
-        }
-
-        return commonList;
-    }
     
-    private float ComputeLevenshteinSimilarity(string source, string target)
-    {
-        if ((source == null) || (target == null)) return 0.0f;
-        if ((source.Length == 0) || (target.Length == 0)) return 0.0f;
-        if (source == target) return 1.0f;
-
-        int sourceWordCount = source.Length;
-        int targetWordCount = target.Length;
-   
-        // Step 1
-        if (sourceWordCount == 0)
-            return targetWordCount;
-   
-        if (targetWordCount == 0)
-            return sourceWordCount;
-   
-        int[,] distance = new int[sourceWordCount + 1, targetWordCount + 1];
-   
-        // Step 2
-        for (int i = 0; i <= sourceWordCount; distance[i, 0] = i++);
-        for (int j = 0; j <= targetWordCount; distance[0, j] = j++);
-   
-        for (int i = 1; i <= sourceWordCount; i++)
-        {
-            for (int j = 1; j <= targetWordCount; j++)
-            {
-                // Step 3
-                int cost = (target[j - 1] == source[i - 1]) ? 0 : 1;
-   
-                // Step 4
-                distance[i, j] = Math.Min(Math.Min(distance[i - 1, j] + 1, distance[i, j - 1] + 1), distance[i - 1, j - 1] + cost);
-            }
-        }
-        
-        return (float)(1.0 - ((float)distance[sourceWordCount, targetWordCount] / (float)Math.Max(source.Length, target.Length)));
-    }
 }

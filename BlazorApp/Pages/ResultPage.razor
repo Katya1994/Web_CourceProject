@@ -1,8 +1,9 @@
 ﻿@inject IWebHostEnvironment Environment;
 @inject CurrentUser _CurrentUser;
 @inject IChecking _Checking;
+@inject IChecking _ByteCodehecking;
 @inject IFilePreparing _TextPreparing;
-@inject ILCodePreparing _IlCodePreparing;
+@inject ByteCodePreparing ByteCodePreparing;
 
 @page "/ResultPage"
 @using BlazorApp.Data
@@ -66,6 +67,9 @@
     
     protected override void OnInitialized()
     {
+        _Checking = new SimpleChecking();
+        _ByteCodehecking = new ByteCodeChecking();
+        
         isCalculated = false;
         
         if(_CurrentUser.UserName is null)
@@ -84,15 +88,15 @@
         try
         {
             _TextPreparing = new TextPreparing();
-            _IlCodePreparing = new ILCodePreparing();
+            ByteCodePreparing = new ByteCodePreparing();
 
             Extracting.ExtractAll(path);
             _textDictionary = _TextPreparing.FillCheckingDictionary(path);
-            _ilCodeDictionary = _IlCodePreparing.FillCheckingDictionary(path, saveIlPath);
+            _ilCodeDictionary = ByteCodePreparing.FillCheckingDictionary(path, saveIlPath);
             _CurrentUser.TextResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _textDictionary).ToString("0.00");
-            _CurrentUser.ILResult = _Checking.CalculatePlagPercent(_CurrentUser.UserName, _ilCodeDictionary).ToString("0.00");
+            _CurrentUser.ILResult = _ByteCodehecking.CalculatePlagPercent(_CurrentUser.UserName, _ilCodeDictionary).ToString("0.00");
 
-            WriteResultToFile(_CurrentUser.ILResult, _CurrentUser.TextResult);
+            WriteResultToFile(_CurrentUser.TextResult, _CurrentUser.ILResult);
         }
         catch (Exception ex)
         {

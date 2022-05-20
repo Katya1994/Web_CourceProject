@@ -2,7 +2,7 @@
 
 namespace BlazorApp.Data;
 
-public class ILCodePreparing : TextPreparing
+public class ByteCodePreparing : TextPreparing
 {
     private const string _pathToBuild = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe";
     private const string _pathToIldasm = @"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools\ildasm.exe";
