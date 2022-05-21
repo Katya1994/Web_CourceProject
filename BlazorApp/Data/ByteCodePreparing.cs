@@ -89,6 +89,8 @@ public class ByteCodePreparing : TextPreparing
 
             if (!Directory.Exists(SavePath))
                 Directory.CreateDirectory(SavePath);
+            else if (new DirectoryInfo(SavePath).GetFiles().Length > 0)
+                continue;
             
             SlnPath = dir.GetFiles()[0].FullName;
             BuildProject();
