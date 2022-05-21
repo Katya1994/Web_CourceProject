@@ -12,6 +12,16 @@
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <SourceRoot Include="C:\Users\Kate\.nuget\packages\" />
   </ItemGroup>
+  <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Compile Include="$(NuGetPackageRoot)csvexport\1.0.2\contentFiles\any\any\CsvExport.cs" Condition="Exists('$(NuGetPackageRoot)csvexport\1.0.2\contentFiles\any\any\CsvExport.cs')">
+      <NuGetPackageId>CsvExport</NuGetPackageId>
+      <NuGetPackageVersion>1.0.2</NuGetPackageVersion>
+      <NuGetItemType>Compile</NuGetItemType>
+      <Pack>false</Pack>
+      <Private>False</Private>
+      <Link>CsvExport.cs</Link>
+    </Compile>
+  </ItemGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Import Project="$(NuGetPackageRoot)blazor.bootstrap\0.2.3\buildTransitive\Blazor.Bootstrap.props" Condition="Exists('$(NuGetPackageRoot)blazor.bootstrap\0.2.3\buildTransitive\Blazor.Bootstrap.props')" />
   </ImportGroup>

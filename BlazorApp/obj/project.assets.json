@@ -20,6 +20,16 @@
           "buildMultiTargeting/Blazor.Bootstrap.props": {}
         }
       },
+      "CsvExport/1.0.2": {
+        "type": "package",
+        "contentFiles": {
+          "contentFiles/any/any/CsvExport.cs": {
+            "buildAction": "Compile",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/6.0.3": {
         "type": "package",
         "dependencies": {
@@ -222,6 +232,19 @@
         "staticwebassets/blazor.bootstrap.css",
         "staticwebassets/blazor.bootstrap.js",
         "staticwebassets/icon/128X128.png"
+      ]
+    },
+    "CsvExport/1.0.2": {
+      "sha512": "CIOVrMlsylct6Q7qxPl3RUFKLZCkwvqqyeN+seDAo9ACM/+6GFBKPaSH9RTP5ZPm7UpaFu5NIHeyKbBF7wc8+Q==",
+      "type": "package",
+      "path": "csvexport/1.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/CsvExport.cs",
+        "contentFiles/any/any/CsvExport.cs",
+        "csvexport.1.0.2.nupkg.sha512",
+        "csvexport.nuspec"
       ]
     },
     "Microsoft.AspNetCore.Authorization/6.0.3": {
@@ -561,6 +584,7 @@
   "projectFileDependencyGroups": {
     "net6.0": [
       "Blazor.Bootstrap >= 0.2.3",
+      "CsvExport >= 1.0.2",
       "SharpZipLib >= 1.3.3"
     ]
   },
@@ -606,6 +630,10 @@
           "Blazor.Bootstrap": {
             "target": "Package",
             "version": "[0.2.3, )"
+          },
+          "CsvExport": {
+            "target": "Package",
+            "version": "[1.0.2, )"
           },
           "SharpZipLib": {
             "target": "Package",
